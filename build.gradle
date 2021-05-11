@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'com.jagrosh'
-version '2.4'
+version '3.0'
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 java.targetCompatibility = JavaVersion.VERSION_1_8
@@ -47,8 +47,8 @@ dependencies {
 
 shadowJar {
     mainClassName = 'com.jagrosh.giveawaybot.GiveawayBot'
-    classifier     = ''
-    version        = ''
+    classifier     = 'jar-with-dependencies'
+    version        = version
     destinationDir = new File('./shadowjar/')
 }
 
