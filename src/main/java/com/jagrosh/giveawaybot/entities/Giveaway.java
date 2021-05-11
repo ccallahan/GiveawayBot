@@ -182,7 +182,7 @@ public class Giveaway
         eb.setFooter((winners==1 ? "" : winners+" Winners | ") + "Ended at",null);
         eb.setTimestamp(end);
         if(prize!=null)
-            eb.setTitle(prize,  null);
+            eb.setTitle(prize, null);
         String toSend;
         try 
         {
