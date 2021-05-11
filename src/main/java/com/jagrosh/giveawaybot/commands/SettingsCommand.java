@@ -18,7 +18,6 @@ package com.jagrosh.giveawaybot.commands;
 import com.jagrosh.giveawaybot.Bot;
 import com.jagrosh.giveawaybot.Constants;
 import com.jagrosh.giveawaybot.database.managers.GuildSettingsManager.GuildSettings;
-import com.jagrosh.giveawaybot.entities.Giveaway;
 import com.jagrosh.giveawaybot.entities.PremiumLevel;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -26,11 +25,8 @@ import com.vdurmont.emoji.EmojiManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  *
@@ -121,19 +117,22 @@ public class SettingsCommand extends Command
 
         final String finalExtracted = extracted; // because of lambda expression
         event.getMessage().addReaction(finalExtracted)
-                .map((success) -> {
+                .map((success) ->
+                {
                     bot.getDatabase().settings.updateEmoji(event.getGuild(), finalExtracted);
                     event.replySuccess("Successfully set " + args[1] + " as the new servers reaction emoji.");
                     event.getMessage().removeReaction(finalExtracted, event.getSelfUser()).queue();
                     return null;
                 })
-                .onErrorMap((error) -> {
+                .onErrorMap((error) ->
+                {
                     event.replyWarning("The provided emoji is not accessible for me. Please use a different one.");
                     return null;
                 }).queue();
     }
 
-    private void resetBlock(CommandEvent event) {
+    private void resetBlock(CommandEvent event)
+    {
         if (bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).getEmojiRaw() == null)
             return; // might be redundant check, will remove if desired
         bot.getDatabase().settings.updateEmoji(event.getGuild(), null);

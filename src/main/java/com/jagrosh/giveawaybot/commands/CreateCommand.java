@@ -25,12 +25,16 @@ import com.jagrosh.giveawaybot.util.FormatUtil;
 import com.jagrosh.giveawaybot.util.OtherUtil;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.utils.FinderUtil;
-import java.time.Instant;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  *
@@ -57,7 +61,8 @@ public class CreateCommand extends GiveawayCommand
     }
     
     @Override
-    protected void execute(CommandEvent event) {
+    protected void execute(CommandEvent event)
+    {
         // ignore if there's already creation running here
         if (current.contains(event.getChannel().getIdLong()))
             return;
@@ -75,7 +80,8 @@ public class CreateCommand extends GiveawayCommand
                 + "You can type `cancel` at any time to cancel creation.";
 
         GuildSettingsManager.GuildSettings settings = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong());
-        if (!level.customEmoji && settings.getEmojiRaw() != null) {
+        if (!level.customEmoji && settings.getEmojiRaw() != null)
+        {
             toSend += "\nNote: Your giveaway emoji has been reset since your last giveaway creation.";
             bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
         }
@@ -235,9 +241,12 @@ public class CreateCommand extends GiveawayCommand
             }
 
             Instant now = Instant.now();
-            if (bot.startGiveaway(tchan, event.getAuthor(), now, seconds, winners, prize)) {
+            if(bot.startGiveaway(tchan, event.getAuthor(), now, seconds, winners, prize))
+            {
                 event.replySuccess("Done! The giveaway for the `" + e.getMessage().getContentRaw() + "` is starting in " + tchan.getAsMention() + "!");
-            } else {
+            }
+            else
+            {
                 event.replyError("Uh oh. Something went wrong and I wasn't able to start the giveaway." + CANCEL);
             }
         });

@@ -23,10 +23,11 @@ import com.jagrosh.giveawaybot.entities.PremiumLevel;
 import com.jagrosh.giveawaybot.util.FormatUtil;
 import com.jagrosh.giveawaybot.util.OtherUtil;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import java.time.Instant;
-import java.util.List;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+
+import java.time.Instant;
+import java.util.List;
 
 /**
  *
@@ -131,7 +132,7 @@ public class StartCommand extends GiveawayCommand
         }
 
         GuildSettings settings = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong());
-        if (!level.customEmoji && settings.getEmojiRaw() != null)
+        if(!level.customEmoji && settings.getEmojiRaw() != null)
         {
             bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
         }

@@ -22,22 +22,14 @@ import com.jagrosh.giveawaybot.util.FormatUtil;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.examples.command.PingCommand;
-import com.neovisionaries.ws.client.WebSocketFactory;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Message.MentionType;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleAddEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.role.update.RoleUpdateColorEvent;
@@ -51,6 +43,17 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -118,14 +121,18 @@ public class Bot extends ListenerAdapter
             emoji = Constants.TADA;
 
         final AtomicReference<String> finalEmoji = new AtomicReference<>(emoji);
-        channel.sendMessage(msg).queue(m -> {
-            m.addReaction(finalEmoji.get()).onErrorFlatMap(ignored -> { // this might be perms error or because we can't add that emoji
-                channel.sendMessageFormat("%s Failed to use your custom emoji. It's been automatically reset.\nThis message self destructs in 20 seconds.", Constants.WARNING).delay(20, TimeUnit.SECONDS).flatMap(Message::delete).queue(s->{},f->{});
-                database.settings.updateEmoji(channel.getGuild(), null);
-                finalEmoji.set(null);
-                return m.addReaction(Constants.TADA);
-            }).queue();
-            database.giveaways.createGiveaway(m, creator, end, winners, prize, finalEmoji.get(), false);
+        channel.sendMessage(msg)
+                .queue(m ->
+                {
+                    m.addReaction(finalEmoji.get())
+                            .onErrorFlatMap(ignored ->
+                            { // this might be because we can't add that emoji
+                                channel.sendMessageFormat("%s Failed to use your custom emoji. It's been automatically reset.\nThis message self destructs in 20 seconds.", Constants.WARNING).delay(20, TimeUnit.SECONDS).flatMap(Message::delete).queue(s->{},f->{});
+                                database.settings.updateEmoji(channel.getGuild(), null);
+                                finalEmoji.set(null);
+                                return m.addReaction(Constants.TADA);
+                            }).queue();
+                    database.giveaways.createGiveaway(m, creator, end, winners, prize, finalEmoji.get(), false);
         }, v -> LOG.warn("Unable to start giveaway: "+v));
         return true;
     }
