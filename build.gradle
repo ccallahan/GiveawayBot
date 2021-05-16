@@ -15,6 +15,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
+        name 'bintray-jagrosh'
         url 'https://dl.bintray.com/jagrosh/maven'
         }
     maven {
