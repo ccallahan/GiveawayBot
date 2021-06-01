@@ -19,6 +19,7 @@ import com.jagrosh.easysql.DataManager;
 import com.jagrosh.easysql.SQLColumn;
 import com.jagrosh.easysql.columns.*;
 import com.jagrosh.giveawaybot.database.Database;
+import com.jagrosh.giveawaybot.entities.Emoji;
 import com.jagrosh.giveawaybot.entities.Giveaway;
 import com.jagrosh.giveawaybot.entities.Status;
 import net.dv8tion.jda.api.entities.Guild;
@@ -175,7 +176,7 @@ public class GiveawayManager extends DataManager
     private static Giveaway giveaway(ResultSet results) throws SQLException
     {
         return new Giveaway(MESSAGE_ID.getValue(results), CHANNEL_ID.getValue(results), GUILD_ID.getValue(results), USER_ID.getValue(results),
-                END_TIME.getValue(results), NUM_WINNERS.getValue(results), PRIZE.getValue(results), EMOJI.getValue(results), Status.values()[STATUS.getValue(results)],
+                END_TIME.getValue(results), NUM_WINNERS.getValue(results), PRIZE.getValue(results), new Emoji(EMOJI.getValue(results)), Status.values()[STATUS.getValue(results)],
                 EXPANDED.getValue(results));
     }
 }

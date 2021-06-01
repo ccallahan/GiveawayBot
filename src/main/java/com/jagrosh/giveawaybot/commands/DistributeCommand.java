@@ -22,16 +22,16 @@ import com.jagrosh.giveawaybot.entities.PremiumLevel;
 import com.jagrosh.giveawaybot.util.FormatUtil;
 import com.jagrosh.giveawaybot.util.OtherUtil;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.exceptions.PermissionException;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 
 /**
  *
@@ -169,7 +169,7 @@ public class DistributeCommand extends GiveawayCommand
             return;
         }
 
-        String emoji = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).getEmojiRaw();
+        String emoji = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).emoji.getRaw();
         // try to validate emoji
         if (!OtherUtil.validateEmoji(event.getMessage(), emoji))
         {

@@ -80,7 +80,7 @@ public class CreateCommand extends GiveawayCommand
                 + "You can type `cancel` at any time to cancel creation.";
 
         GuildSettingsManager.GuildSettings settings = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong());
-        if (!level.customEmoji && settings.getEmojiRaw() != null)
+        if (!level.customEmoji && !settings.emoji.isSet())
         {
             toSend += "\nNote: Your giveaway emoji has been reset since your last giveaway creation.";
             bot.getDatabase().settings.updateEmoji(event.getGuild(), null);

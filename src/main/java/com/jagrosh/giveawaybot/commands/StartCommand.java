@@ -132,7 +132,7 @@ public class StartCommand extends GiveawayCommand
         }
 
         GuildSettings settings = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong());
-        if(!level.customEmoji && settings.getEmojiRaw() != null)
+        if(!level.customEmoji && !settings.emoji.isSet())
         {
             bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
         }

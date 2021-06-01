@@ -21,7 +21,6 @@ import com.jagrosh.giveawaybot.database.managers.GuildSettingsManager.GuildSetti
 import com.jagrosh.giveawaybot.entities.PremiumLevel;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.vdurmont.emoji.EmojiManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -105,7 +104,7 @@ public class SettingsCommand extends Command
         {
             extracted = args[1].substring(1, args[1].length() - 1);
         }
-        else if (EmojiManager.isEmoji(args[1]))
+        else if (args[1].length() < 10)
         {
             extracted = args[1];
         }
@@ -133,7 +132,7 @@ public class SettingsCommand extends Command
 
     private void resetBlock(CommandEvent event)
     {
-        if (bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).getEmojiRaw() == null)
+        if (bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).emoji.isSet())
             return; // might be redundant check, will remove if desired
         bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
         event.replySuccess("Reaction has been reset to default " + Constants.TADA + ".");
@@ -143,7 +142,7 @@ public class SettingsCommand extends Command
     {
         eb.setColor(settings.color);
         eb.appendDescription("Premium Level: **" + level.name + "**\n");
-        eb.appendDescription("\nReaction: " + settings.getEmojiDisplay());
+        eb.appendDescription("\nReaction: " + settings.emoji.getDisplay());
         eb.setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl());
         event.reply(new MessageBuilder()
                 .setContent(Constants.YAY + " **" + event.getSelfUser().getName() + "** settings: ")

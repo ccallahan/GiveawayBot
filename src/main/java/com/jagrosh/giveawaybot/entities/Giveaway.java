@@ -18,18 +18,10 @@ package com.jagrosh.giveawaybot.entities;
 import com.jagrosh.giveawaybot.Constants;
 import com.jagrosh.giveawaybot.database.Database;
 import com.jagrosh.giveawaybot.database.managers.GuildSettingsManager;
-import com.jagrosh.giveawaybot.rest.RestMessageAction;
 import com.jagrosh.giveawaybot.rest.RestJDA;
+import com.jagrosh.giveawaybot.rest.RestMessageAction;
 import com.jagrosh.giveawaybot.util.FormatUtil;
 import com.jagrosh.giveawaybot.util.GiveawayUtil;
-import java.awt.Color;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -39,6 +31,15 @@ import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.internal.utils.EncodingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -53,11 +54,11 @@ public class Giveaway
     public final Instant end;
     public final int winners;
     public final String prize;
-    public final String emoji;
+    public final Emoji emoji;
     public final Status status;
     public final boolean expanded;
     
-    public Giveaway(long messageId, long channelId, long guildId, long userId, Instant end, int winners, String prize, String emoji, Status status, boolean expanded)
+    public Giveaway(long messageId, long channelId, long guildId, long userId, Instant end, int winners, String prize, Emoji emoji, Status status, boolean expanded)
     {
         this.messageId = messageId;
         this.channelId = channelId;
@@ -66,7 +67,7 @@ public class Giveaway
         this.end = end;
         this.winners = winners;
         this.prize = prize==null ? null : prize.isEmpty() ? null : prize;
-        this.emoji = emoji==null ? null : emoji.isEmpty() ? null : emoji;
+        this.emoji = emoji;
         this.status = status;
         this.expanded = expanded;
     }
@@ -75,7 +76,7 @@ public class Giveaway
     {
         MessageBuilder mb = new MessageBuilder();
         boolean close = now.plusSeconds(9).isAfter(end);
-        String displayedEmoji = (emoji == null) ? Constants.TADA : emoji;
+        String displayedEmoji = emoji.getDisplay();
         mb.append(Constants.YAY).append(close ? " **G I V E A W A Y** " : "   **GIVEAWAY**   ").append(Constants.YAY);
         EmbedBuilder eb = new EmbedBuilder();
         if(close)
@@ -84,8 +85,6 @@ public class Giveaway
             eb.setColor(Constants.BLURPLE);
         else
             eb.setColor(color);
-        if(emoji.contains(":"))
-            displayedEmoji = "<"+emoji+">";
         eb.setFooter((winners==1 ? "" : winners+" winners | ")+"Ends at",null);
         eb.setTimestamp(end);
         eb.setDescription("React with " + displayedEmoji + " to enter!"
@@ -172,9 +171,7 @@ public class Giveaway
     
     public void end(RestJDA restJDA, Map<Long,Long> additional)
     {
-        String copyEmoji = emoji;
-        if (copyEmoji == null) copyEmoji = Constants.TADA;
-        final String encodedEmoji = EncodingUtil.encodeUTF8(copyEmoji);
+        final String encodedEmoji = EncodingUtil.encodeUTF8(emoji.getReaction());
         MessageBuilder mb = new MessageBuilder();
         mb.append(Constants.YAY).append(" **GIVEAWAY ENDED** ").append(Constants.YAY);
         EmbedBuilder eb = new EmbedBuilder();

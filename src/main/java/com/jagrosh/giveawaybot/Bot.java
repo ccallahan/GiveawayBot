@@ -113,14 +113,11 @@ public class Bot extends ListenerAdapter
             return false;
         database.settings.updateColor(channel.getGuild());
         Instant end = now.plusSeconds(seconds);
-        String emoji = database.settings.getSettings(channel.getGuild().getIdLong()).getEmojiRaw();
+        Emoji emoji = database.settings.getSettings(channel.getGuild().getIdLong()).emoji;
         Message msg = new Giveaway(0, channel.getIdLong(), channel.getGuild().getIdLong(), creator.getIdLong(), end, winners, prize, emoji, Status.RUN, false)
                 .render(channel.getGuild().getSelfMember().getColor(), now);
 
-        if (emoji == null || emoji.isEmpty())
-            emoji = Constants.TADA;
-
-        final AtomicReference<String> finalEmoji = new AtomicReference<>(emoji);
+        final AtomicReference<String> finalEmoji = new AtomicReference<>(emoji.getDisplay());
         channel.sendMessage(msg)
                 .queue(m ->
                 {
@@ -145,14 +142,11 @@ public class Bot extends ListenerAdapter
             return false;
         database.settings.updateColor(channel.getGuild());
         Instant end = now.plusSeconds(seconds);
-        String emoji = database.settings.getSettings(channel.getGuild().getIdLong()).getEmojiRaw();
+        Emoji emoji = database.settings.getSettings(channel.getGuild().getIdLong()).emoji;
         Message msg = new Giveaway(0, channel.getIdLong(), channel.getGuild().getIdLong(), creator.getIdLong(), end, winners, prize, emoji, Status.RUN, false)
                 .render(channel.getGuild().getSelfMember().getColor(), now);
 
-        if (emoji == null || emoji.isEmpty())
-            emoji = Constants.TADA;
-
-        final String finalEmoji = emoji;
+        final String finalEmoji = emoji.getDisplay();
         Map<Long,Long> map = additional.stream()
                 .map(c -> 
                 { 
