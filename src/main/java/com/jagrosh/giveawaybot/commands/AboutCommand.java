@@ -25,6 +25,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ import java.util.List;
  */
 public class AboutCommand extends Command 
 {
+    private final Logger log = LoggerFactory.getLogger(AboutCommand.class);
     private final static String STATS = "\uD83D\uDCCA"; // 📊
     private final static String LINKS = "\uD83C\uDF10"; // 🌐
     private final Bot bot;
@@ -50,6 +53,11 @@ public class AboutCommand extends Command
     @Override
     protected void execute(CommandEvent event)
     {
+        if(bot.isSafeMode())
+        {
+            log.info("Ignored '" + this.name +"' by " + event.getAuthor().getId() + " in " + (event.getGuild() == null ? "DMs" : event.getGuild().getId()) + "/" + event.getChannel().getId());
+            return;
+        }
         EmbedBuilder eb = new EmbedBuilder();
         MessageBuilder mb = new MessageBuilder();
         mb.append(Constants.YAY+" All about **GiveawayBot** "+Constants.YAY);

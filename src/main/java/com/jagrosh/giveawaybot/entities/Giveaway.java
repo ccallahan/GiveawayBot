@@ -25,7 +25,6 @@ import com.jagrosh.giveawaybot.util.FormatUtil;
 import com.jagrosh.giveawaybot.util.GiveawayUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;

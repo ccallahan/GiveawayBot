@@ -17,7 +17,7 @@ repositories {
     maven {
         name 'bintray-jagrosh'
         url 'https://dl.bintray.com/jagrosh/maven'
-        }
+    }
     maven {
         url 'https://jitpack.io'
     }
