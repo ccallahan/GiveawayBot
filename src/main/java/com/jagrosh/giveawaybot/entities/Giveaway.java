@@ -21,7 +21,6 @@ import com.jagrosh.giveawaybot.database.managers.GuildSettingsManager;
 import com.jagrosh.giveawaybot.rest.RestJDA;
 import com.jagrosh.giveawaybot.rest.RestMessageAction;
 import com.jagrosh.giveawaybot.rest.RestReactionPaginationAction;
-import com.jagrosh.giveawaybot.util.FormatUtil;
 import com.jagrosh.giveawaybot.util.GiveawayUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -33,14 +32,12 @@ import net.dv8tion.jda.internal.utils.EncodingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
+import java.awt.Color;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -90,12 +87,12 @@ public class Giveaway
         eb.setFooter((winners==1 ? "" : winners+" winners | ")+"Ends at",null);
         eb.setTimestamp(end);
         eb.setDescription("React with " + displayedEmoji + " to enter!"
-                + "\nTime remaining: " + FormatUtil.secondsToTime(now.until(end, ChronoUnit.SECONDS))
+                + "\nEnds: <t:" + end.getEpochSecond() + ":R> (<t:" + end.getEpochSecond() + ":f>)"
                 + "\nHosted by: <@" + userId + ">");
         if(prize!=null)
-            eb.setTitle(prize, null);
+            eb.setAuthor(prize, null, null);
         if(close)
-            eb.setAuthor("Last chance to enter!!!", null, null);
+            eb.setTitle("Last chance to enter!!!", null);
         mb.setEmbed(eb.build());
         return mb.build();
     }
@@ -197,14 +194,14 @@ public class Giveaway
         eb.setFooter((winners==1 ? "" : winners+" Winners | ") + "Ended at",null);
         eb.setTimestamp(end);
         if(prize!=null)
-            eb.setTitle(prize, null);
+            eb.setAuthor(prize, null, null);
         try 
         {
             // stream over all the users that reacted (paginating as necessary
             LOG.debug("Retrieving reactions for giveaway " + messageId);
             List<User> users = getAllReactions(restJDA, channelId, messageId, encodedEmoji);
             additional.entrySet().forEach(e -> users.addAll(getAllReactions(restJDA, e.getKey(), e.getValue(), encodedEmoji)));
-            Set<Long> ids = users.stream().filter(u -> !u.isBot()).map(User::getIdLong).collect(Collectors.toSet());
+            List<Long> ids = users.stream().filter(u -> !u.isBot()).map(User::getIdLong).distinct().collect(Collectors.toList());
             LOG.debug("Retrieved " + ids.size() + " reactions for giveaway " + messageId);
             mb2.setEmbed(new EmbedBuilder()
                     .setColor(new Color(0x36393F))
