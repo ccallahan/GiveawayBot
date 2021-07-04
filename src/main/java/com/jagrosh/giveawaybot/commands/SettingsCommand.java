@@ -34,8 +34,8 @@ import java.util.Arrays;
 public class SettingsCommand extends Command
 {
     private final Bot bot;
-    private final String EMOTE_REGEX = "<a?:\\w{2,32}:\\d{1,20}>";
-    private final String[] CLEAR_ALIAS = new String[]{"reset", "clear"};
+//    private final String EMOTE_REGEX = "<a?:\\w{2,32}:\\d{1,20}>";
+//    private final String[] CLEAR_ALIAS = new String[]{"reset", "clear"};
     
     public SettingsCommand(Bot bot)
     {
@@ -51,92 +51,81 @@ public class SettingsCommand extends Command
     @Override
     protected void execute(CommandEvent event)
     {
+        // Inconsistency of requesting DB data, level requires guild & has null check, settings require ID only without null check
         GuildSettings settings = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong());
         PremiumLevel level = bot.getDatabase().premium.getPremiumLevel(event.getGuild());
 
-        String[] args = event.getArgs().split("\\s+", 2);
-
-        switch (args[0])
-        {
-            case "emoji":
-                emojiBlock(event, level, args);
-                break;
-            case "clear":
-            case "reset":
-                resetBlock(event);
-                break;
-            default:
-                defaultBlock(event, new EmbedBuilder(), settings, level);
-        }
-
-
+        defaultBlock(event, new EmbedBuilder(), settings, level);
     }
 
-    private void emojiBlock(CommandEvent event, PremiumLevel level, String[] args)
-    {
-        if (args.length != 2)
-        {
-            defaultBlock(event, new EmbedBuilder(), bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()), level);
-            return;
-        }
+//    Unused code, might become useful when switching to slash commands.
+//
+//    private void emojiBlock(CommandEvent event, PremiumLevel level, String[] args)
+//    {
+//        if (args.length != 2)
+//        {
+//            defaultBlock(event, new EmbedBuilder(), bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()), level);
+//            return;
+//        }
+//
+//        if (Arrays.stream(CLEAR_ALIAS).anyMatch(it -> args[1].equalsIgnoreCase(it)))
+//        {
+//            resetBlock(event);
+//            return;
+//        }
+//
+//        if (!level.customEmoji)
+//        {
+//            event.replyError("This server must have a premium level to set a custom emoji!");
+//            return;
+//        }
+//
+//        if (args[1].length() > 60)
+//        {
+//            event.replyWarning("It seems like you entered multiple emojis. Please enter only one valid emoji.");
+//            return;
+//        }
+//
+//        String extracted;
+//
+//        if (args[1].matches(EMOTE_REGEX))
+//        {
+//            extracted = args[1].substring(1, args[1].length() - 1);
+//        }
+//        else if (args[1].length() < 10)
+//        {
+//            extracted = args[1];
+//        }
+//        else
+//        {
+//            event.replyError("The provided emoji seems to be invalid.");
+//            return;
+//        }
+//
+//        final String finalExtracted = extracted; // because of lambda expression
+//        event.getMessage().addReaction(finalExtracted)
+//                .map((success) ->
+//                {
+//                    bot.getDatabase().settings.updateEmoji(event.getGuild(), finalExtracted);
+//                    event.replySuccess("Successfully set " + args[1] + " as the new servers reaction emoji.");
+//                    event.getMessage().removeReaction(finalExtracted, event.getSelfUser()).queue();
+//                    return null;
+//                })
+//                .onErrorMap((error) ->
+//                {
+//                    event.replyWarning("The provided emoji is not accessible for me. Please use a different one.");
+//                    return null;
+//                }).queue();
+//    }
+//
+//    private void resetBlock(CommandEvent event)
+//    {
+//        if (bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).emoji.isSet())
+//            return; // might be redundant check, will remove if desired
+//        bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
+//        event.replySuccess("Reaction has been reset to default " + Constants.TADA + ".");
+//    }
 
-        if (Arrays.stream(CLEAR_ALIAS).anyMatch(it -> args[1].equalsIgnoreCase(it)))
-        {
-            resetBlock(event);
-            return;
-        }
-
-        if (!level.customEmoji)
-        {
-            event.replyError("This server must have a premium level to set a custom emoji!");
-            return;
-        }
-
-        if (args[1].length() > 60)
-        {
-            event.replyWarning("It seems like you entered multiple emojis. Please enter only one valid emoji.");
-            return;
-        }
-
-        String extracted;
-
-        if (args[1].matches(EMOTE_REGEX))
-        {
-            extracted = args[1].substring(1, args[1].length() - 1);
-        }
-        else if (args[1].length() < 10)
-        {
-            extracted = args[1];
-        }
-        else
-        {
-            event.replyError("The provided emoji seems to be invalid.");
-            return;
-        }
-
-        final String finalExtracted = extracted; // because of lambda expression
-        event.getMessage().addReaction(finalExtracted)
-                .map((success) ->
-                {
-                    bot.getDatabase().settings.updateEmoji(event.getGuild(), finalExtracted);
-                    event.replySuccess("Successfully set " + args[1] + " as the new servers reaction emoji.");
-                    event.getMessage().removeReaction(finalExtracted, event.getSelfUser()).queue();
-                    return null;
-                })
-                .onErrorMap((error) ->
-                {
-                    event.replyWarning("The provided emoji is not accessible for me. Please use a different one.");
-                    return null;
-                }).queue();
-    }
-
-    private void resetBlock(CommandEvent event)
-    {
-        if (bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).emoji.isSet())
-            return; // might be redundant check, will remove if desired
-        bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
-        event.replySuccess("Reaction has been reset to default " + Constants.TADA + ".");
-    }
 
     private void defaultBlock(CommandEvent event, EmbedBuilder eb, GuildSettings settings, PremiumLevel level)
     {

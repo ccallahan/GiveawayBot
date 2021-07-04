@@ -169,13 +169,13 @@ public class DistributeCommand extends GiveawayCommand
             return;
         }
 
-        String emoji = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).emoji.getRaw();
-        // try to validate emoji
-        if (!OtherUtil.validateEmoji(event.getMessage(), emoji))
-        {
-            event.getTextChannel().sendMessageFormat("%s Failed to use your custom emoji. It's been automatically reset.\nThis message self destructs in 20 seconds.", Constants.WARNING).delay(20, TimeUnit.SECONDS).flatMap(Message::delete).queue(s->{},f->{});
-            bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
-        }
+//        String emoji = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong()).emoji.getRaw();
+//        // try to validate emoji
+//        if (!OtherUtil.validateEmoji(event.getMessage(), emoji))
+//        {
+//            event.getTextChannel().sendMessageFormat("%s Failed to use your custom emoji. It's been automatically reset.\nThis message self destructs in 20 seconds.", Constants.WARNING).delay(20, TimeUnit.SECONDS).flatMap(Message::delete).queue(s->{},f->{});
+//            bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
+//        }
 
         // try to delete the command if possible
         try

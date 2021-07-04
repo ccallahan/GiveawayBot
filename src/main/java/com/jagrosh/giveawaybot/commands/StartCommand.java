@@ -116,26 +116,26 @@ public class StartCommand extends GiveawayCommand
         }
         
         // check for too many giveaways runnning
-        List<Giveaway> list = level.perChannelMaxGiveaways 
+        List<Giveaway> existing = level.perChannelMaxGiveaways
                 ? bot.getDatabase().giveaways.getGiveaways(event.getTextChannel()) 
                 : bot.getDatabase().giveaways.getGiveaways(event.getGuild());
-        if(list == null)
+        if(existing == null)
         {
             event.replyError("An error occurred when trying to start giveaway.");
             return;
         }
-        else if(list.size() >= level.maxGiveaways)
+        else if(existing.size() >= level.maxGiveaways)
         {
             event.replyError("There are already " + level.maxGiveaways + " giveaways running in this " 
                     + (level.perChannelMaxGiveaways ? "channel" : "server") + "!");
             return;
         }
 
-        GuildSettings settings = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong());
-        if(!level.customEmoji && !settings.emoji.isSet())
-        {
-            bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
-        }
+//        GuildSettings settings = bot.getDatabase().settings.getSettings(event.getGuild().getIdLong());
+//        if(!level.customEmoji && !settings.emoji.isSet())
+//        {
+//            bot.getDatabase().settings.updateEmoji(event.getGuild(), null);
+//        }
         
         // try to delete the command if possible
         try
