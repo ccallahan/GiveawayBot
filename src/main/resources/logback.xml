@@ -31,8 +31,16 @@
             </pattern>
         </encoder>
     </appender>
+ <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern> 
+                %nopex[%d{HH:mm:ss}] [%level] [%logger{0}]: %msg%n%ex
+            </pattern>
+        </layout>
+    </appender>
     
     <root level="INFO">
         <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>     
     </root>
 </configuration>
