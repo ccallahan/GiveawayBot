@@ -207,7 +207,7 @@ public class Bot extends ListenerAdapter
         CommandClient client = new CommandClientBuilder()
                 .setPrefix(config.getString("prefix"))
                 .setAlternativePrefix(config.getString("altprefix"))
-                .setOwnerId("113156185389092864")
+                .setOwnerId(config.getString("ownerid"))
                 .setActivity(Activity.playing(Constants.TADA+" "+Constants.WEBSITE+" "+Constants.TADA+" Type !ghelp "+Constants.TADA))
                 .setEmojis(Constants.TADA, Constants.WARNING, Constants.ERROR)
                 .setHelpConsumer(event -> event.replyInDm(FormatUtil.formatHelp(event), 
