@@ -64,7 +64,7 @@ public class AboutCommand extends Command
         eb.setTitle("Hold giveaways quickly and easily!");
         eb.setDescription("Hello! I'm **GiveawayBot**, and I'm here to make it as easy as possible to hold "
                 + "giveaways on your Discord server! I am hosted by [CHS](https://chs.gg) "
-                + "(Capitol Hosting Solutions, LLC) using the [JDA]("+JDAInfo.GITHUB+") library ("+JDAInfo.VERSION+") and "
+                + "(Capitol Hosting Solutions) using the [JDA]("+JDAInfo.GITHUB+") library ("+JDAInfo.VERSION+") and "
                 + "[JDA-Utilities]("+JDAUtilitiesInfo.GITHUB+") ("+JDAUtilitiesInfo.VERSION+"). Check out my "
                 + "commands by typing `" + event.getClient().getPrefix() + "help`");
         eb.addField(STATS + " Stats", event.getClient().getTotalGuilds() + " servers\n" + event.getJDA().getShardInfo().getShardTotal() + " shards", true);
