@@ -50,7 +50,7 @@ public class GiveawayBot {
                     break;
                 case "bot":
                     Bot.main(Integer.parseInt(args[1]), Integer.parseInt(args[2]), args.length>3 ? Integer.parseInt(args[3]) : 32);
-                    Log.i("Giveaway Bot has Started");
+                    LOG.error("Giveaway Bot has Started");
                     break;
                 case "checker":
                     Checker.main();
