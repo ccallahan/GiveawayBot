@@ -28,7 +28,7 @@ public class Constants
 {
     public static final OffsetDateTime STARTUP = OffsetDateTime.now();
     public static final int PRIZE_MAX   = 250;
-    public static final long SERVER_ID  = 711054778884554793;
+    public static final long SERVER_ID  = 585687812548853760L;
     public static final String TADA     = "\uD83C\uDF89"; // 🎉
     public static final String WARNING  = "\uD83D\uDCA5"; // 💥
     public static final String ERROR    = "\uD83D\uDCA5"; // 💥
