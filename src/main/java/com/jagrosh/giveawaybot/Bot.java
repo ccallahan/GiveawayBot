@@ -197,18 +197,18 @@ public class Bot extends ListenerAdapter
         Config config = ConfigFactory.load();
         
         // instantiate a bot with a database connector
-        Bot bot = new Bot(new Database(config.getString("database.host") && LOG.info("Found Database Host"), 
-                                       config.getString("database.username") && LOG.info("Found Database User") , 
-                                       config.getString("database.password") && LOG.info("Found Database Key")), 
-                          config.getString("webhook") && LOG.info("Found Webhook URL"), 
+        Bot bot = new Bot(new Database(config.getString("database.host"), 
+                                       config.getString("database.username"), 
+                                       config.getString("database.password")), 
+                          config.getString("webhook"), 
                           config.hasPath("safemode") && config.getBoolean("safemode"));
         
         // build the client to deal with commands
         CommandClient client = new CommandClientBuilder()
-                .setPrefix(config.getString("prefix") && LOG.info("Found Prefix"))
-                .setAlternativePrefix(config.getString("altprefix") && LOG.info("Found Alt Prefix"))
-                .setOwnerId(config.getString("ownerid") && LOG.info("Found Owner ID"))
-                .setActivity(Activity.playing(Constants.TADA+" "+Constants.WEBSITE+" "+Constants.TADA+" Type !ghelp "+Constants.TADA) && LOG.info("Set Activity"))
+                .setPrefix(config.getString("prefix"))
+                .setAlternativePrefix(config.getString("altprefix"))
+                .setOwnerId(config.getString("ownerid"))
+                .setActivity(Activity.playing(Constants.TADA+" "+Constants.WEBSITE+" "+Constants.TADA+" Type !ghelp "+Constants.TADA))
                 .setEmojis(Constants.TADA, Constants.WARNING, Constants.ERROR)
                 .setHelpConsumer(event -> event.replyInDm(FormatUtil.formatHelp(event), 
                         m-> {try{event.getMessage().addReaction(Constants.REACTION).queue(s->{},f->{});}catch(PermissionException ignored){}}, 
